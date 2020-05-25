@@ -6,7 +6,8 @@ namespace TA_LR4
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Graph angola = new Graph();
+            angola.OutputTable();
         }
     }
 }
