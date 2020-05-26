@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace TA_LR4
 {
@@ -29,6 +31,25 @@ namespace TA_LR4
             {483, 628, 222, 165, 208, 330, 105, 860, 795, 768, 874, 612, 104, 500, 0}
         };
 
+        private int[,] mSmezh =
+        {
+            {0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0},
+            {1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0},
+            {0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1},
+            {1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1},
+            {1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1},
+            {0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0},
+            {1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0},
+            {1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0},
+            {1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0},
+            {1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0},
+            {1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0},
+            {0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1},
+            {1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0},
+            {0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0}
+        };
+
         public void OutputTable()
         {
             Console.Write($"{" ",8}");
@@ -46,6 +67,51 @@ namespace TA_LR4
                 }
                 Console.WriteLine();
             }
+        }
+
+        public void GreedySearch(int start, int finish)
+        {
+            int[] finishDistances = new int[15];
+            for (int i = 0; i < 15; i++)
+            {
+                finishDistances[i] = distances[i, finish];
+            }
+
+            int result = 0;
+            bool[] visited = new bool[15];
+            List<int> path = new List<int> {start};
+            List<string> citiesPath = new List<string> {cities[start]};
+            visited[start] = true;
+
+            while (path.Last() != finish)
+            {
+                int min = -1, minCity = 0;
+                for (int i = 0; i < 15; i++)
+                {
+                    if (mSmezh[path.Last(), i] == 1 && !visited[i])
+                        if (min == -1)
+                        {
+                            min = finishDistances[i];
+                            minCity = i;
+                        }
+                        else if (min > finishDistances[i])
+                        {
+                            min = finishDistances[i];
+                            minCity = i;
+                        }
+
+                }
+                
+                result += distances[path.Last(), minCity];
+                path.Add(minCity);
+                citiesPath.Add(cities[minCity]);
+                visited[minCity] = true;
+                
+            }
+            
+            Console.Write($"{cities[start]}-{cities[finish]}, Расстояние: {result}км, Маршрут: ");
+            Console.WriteLine(String.Join(" -> ", citiesPath));
+
         }
         
     }

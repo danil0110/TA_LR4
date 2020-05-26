@@ -7,7 +7,13 @@ namespace TA_LR4
         static void Main(string[] args)
         {
             Graph angola = new Graph();
-            angola.OutputTable();
+            for (int i = 0; i < 14; i++)
+            {
+                for (int j = i + 1; j < 15; j++)
+                {
+                    angola.GreedySearch(i, j);
+                }
+            }
         }
     }
 }
